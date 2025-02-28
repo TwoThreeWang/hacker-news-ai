@@ -1,0 +1,17 @@
+version: '3'
+services:
+  hacker-news-ai:
+    container_name: hacker-news-ai
+    image: hacker-news-ai:latest
+    volumes:
+      - ./config:/config
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+    networks:
+      - docker-app-network
+
+networks:
+  docker-app-network:
+    external: true
