@@ -63,7 +63,7 @@ func (r *StoryRepository) SaveStories(blogContent string) error {
 	// 插入文章标签关联
 	postTag := models.TbPostTag{
 		TbPostID: post.ID,
-		TbTagID:  6,
+		TbTagID:  15,
 	}
 	if err := tx.Create(&postTag).Error; err != nil {
 		tx.Rollback()

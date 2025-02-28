@@ -61,11 +61,14 @@ func fetchAndProcessStories(hnService *services.HNService, aiService *services.A
 			log.Printf("生成文章总结失败 [%s]: %v", stories[i].Title, err)
 			continue
 		}
+		hnUrl := fmt.Sprintf("https://news.ycombinator.com/item?id=%d", stories[i].ID)
 
-		content := fmt.Sprintf("%s\n\n- 原文: [%s](%s)\n- 作者: %s\n- 评分: %d\n- 评论数: %d\n- 发布时间: %s\n\n---\n\n",
+		content := fmt.Sprintf("%s\n\n- 原文: [%s](%s)\n- Hacker News: [%s](%s)\n- 作者: %s\n- 评分: %d\n- 评论数: %d\n- 发布时间: %s\n\n---\n\n",
 			stories[i].Summary,
 			stories[i].Title,
 			stories[i].URL,
+			hnUrl,
+			hnUrl,
 			stories[i].By,
 			stories[i].Score,
 			stories[i].Descendants,
