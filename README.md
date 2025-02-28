@@ -2,6 +2,8 @@
 
 一个基于 Hacker News 的中文日报项目，每天自动抓取 Hacker News 热门文章及评论，通过 AI 生成中文解读与总结，传递科技前沿信息。
 
+数据库保存结合了 https://github.com/TwoThreeWang/go_simple_forum 这个项目，直接保存到了论坛数据库，实现了联动发布文章。
+
 ## 功能特性
 
 - 🔄 自动抓取 Hacker News 热门文章
