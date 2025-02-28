@@ -1,0 +1,10 @@
+{
+    "gemini_api_key": "AIzaSyD3umor04onFToOubUX1u0Ybm4wYj8w8_s",
+    "hn_api_base_url": "https://hacker-news.firebaseio.com/v0",
+    "top_stories_limit": 30,
+    "db_host": "192.168.80.155",
+    "db_port": 5432,
+    "db_user": "postgres",
+    "db_password": "123456",
+    "db_name": "zhulink"
+}
