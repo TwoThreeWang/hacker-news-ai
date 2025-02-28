@@ -5,6 +5,8 @@ services:
     image: hacker-news-ai:latest
     volumes:
       - ./config:/config
+    labels:
+      keep: "true"
     logging:
       driver: "json-file"
       options:
