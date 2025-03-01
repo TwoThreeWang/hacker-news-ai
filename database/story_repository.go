@@ -21,7 +21,7 @@ func NewStoryRepository() *StoryRepository {
 }
 
 // SaveStories 保存文章列表和博客内容到数据库
-func (r *StoryRepository) SaveStories(blogContent string) error {
+func (r *StoryRepository) SaveStories(blogContent, title, Pid string) error {
 	// 开启事务
 	tx := r.db.Begin()
 	defer func() {
@@ -29,11 +29,9 @@ func (r *StoryRepository) SaveStories(blogContent string) error {
 			tx.Rollback()
 		}
 	}()
-	today := time.Now().Format("20060102")
-	blogContent = fmt.Sprintf("## Hacker News 中文精选 NO.%s\n\n一个基于 Hacker News 的中文日报项目，每天自动抓取 Hacker News 热门文章及评论，通过 AI 生成中文解读与总结，传递科技前沿信息。\n\n![Hacker News 中文精选](https://cdn.wangtwothree.com/imgur/f6uVgbS.jpeg)\n---\n\n%s", today, blogContent)
 	// 创建新的TbPost记录
 	post := models.TbPost{
-		Title:        fmt.Sprintf("每日科技新知 NO.%s：Hacker News 中文解读，科技前沿热点速递", today),
+		Title:        title,
 		Content:      blogContent,
 		Status:       "Active",
 		CreatedAt:    time.Now(),
@@ -41,7 +39,7 @@ func (r *StoryRepository) SaveStories(blogContent string) error {
 		CollectVote:  0,
 		Type:         "ask",
 		UserID:       1,
-		Pid:          fmt.Sprintf("HN%s", today),
+		Pid:          Pid,
 		CommentCount: 0,
 		Point:        0.1,
 		Top:          0,

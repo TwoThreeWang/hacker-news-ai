@@ -1,12 +1,13 @@
 # Hacker News AI 助手
 
-一个基于 Hacker News 的中文日报项目，每天自动抓取 Hacker News 热门文章及评论，通过 AI 生成中文解读与总结，传递科技前沿信息。
+一个基于 Hacker News 和 Dev Community 的中文日报项目，每天自动抓取 Hacker News 和 Dev.to 热门文章及评论，通过 AI 生成中文解读与总结，传递科技前沿信息。
 
 数据库保存结合了 https://github.com/TwoThreeWang/go_simple_forum 这个项目，直接保存到了论坛数据库，实现了联动发布文章。
 
 ## 功能特性
 
 - 🔄 自动抓取 Hacker News 热门文章
+- 🌐 自动抓取 Dev Community 热门文章
 - 🤖 使用 Google Gemini AI 生成中文摘要
 - 📝 自动生成每日科技新闻精选
 - 💾 支持 PostgreSQL 数据持久化
@@ -41,6 +42,7 @@ go mod download
 - 修改配置文件中的相关参数：
   - `gemini_api_key`: Google Gemini API 密钥
   - `hn_api_base_url`: Hacker News API 地址
+  - `dev_api_base_url`: Dev.to API 地址
   - `top_stories_limit`: 每日获取的热门文章数量
   - 数据库相关配置
 
@@ -53,6 +55,7 @@ go run main.go
 
 2. 项目会自动执行以下操作：
 - 从 Hacker News 获取热门文章
+- 从 Dev Community 获取热门文章
 - 使用 AI 生成中文摘要
 - 生成每日科技新闻精选
 - 保存到数据库
@@ -63,6 +66,7 @@ go run main.go
 {
   "gemini_api_key": "your_api_key",
   "hn_api_base_url": "https://hacker-news.firebaseio.com/v0",
+  "dev_api_base_url": "https://dev.to/api",
   "top_stories_limit": 30,
   "db_host": "localhost",
   "db_port": 5432,

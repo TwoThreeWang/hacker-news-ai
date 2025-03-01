@@ -13,6 +13,8 @@ type Config struct {
 
 	// Hacker News API配置
 	HNAPIBaseURL string `json:"hn_api_base_url"`
+	// Dev.to API配置
+	DevAPIBaseURL string `json:"dev_api_base_url"`
 	// 每日获取的热门文章数量
 	TopStoriesLimit int `json:"top_stories_limit"`
 	// 抓取间隔（分钟）
@@ -43,6 +45,7 @@ func LoadConfig(configPath string) (*Config, error) {
 		// 初始化默认配置
 		config = &Config{
 			HNAPIBaseURL:    "https://hacker-news.firebaseio.com/v0",
+			DevAPIBaseURL:   "https://dev.to/api",
 			TopStoriesLimit: 30,
 			FetchInterval:   60,
 		}
