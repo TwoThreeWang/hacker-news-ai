@@ -40,7 +40,7 @@ func main() {
 		log.Fatalf("初始化AI服务失败: %v", err)
 	}
 
-	// Hackwe News AI 助手运行
+	// Hack News AI 助手运行
 	fetchAndProcessHN(hnService, aiService, storyRepo)
 	// dev.to AI 助手运行
 	fetchAndProcessDev(devService, aiService, storyRepo)
@@ -58,13 +58,13 @@ func fetchAndProcessHN(hnService *services.HNService, aiService *services.AIServ
 		return
 	}
 	// 打印获取到的文章数量
-	fmt.Printf("获取到 %d 篇文章\n", len(stories))
+	fmt.Printf("Hacker News 获取到 %d 篇文章\n", len(stories))
 	blogContent := ""
 	// 为每篇文章生成中文总结
 	for i := range stories {
 		fmt.Printf("%d. %s\n", i, stories[i].Title)
 		if err := aiService.GenerateSummary(&stories[i]); err != nil {
-			log.Printf("生成文章总结失败 [%s]: %v", stories[i].Title, err)
+			log.Printf("Hacker News 生成文章总结失败 [%s]: %v", stories[i].Title, err)
 			continue
 		}
 		hnUrl := fmt.Sprintf("https://news.ycombinator.com/item?id=%d", stories[i].ID)
@@ -81,6 +81,12 @@ func fetchAndProcessHN(hnService *services.HNService, aiService *services.AIServ
 			stories[i].Time.Format("2006-01-02 15:04:05"),
 		)
 		blogContent += content
+		// 每次分析间隔3秒，防止api频率限制
+		time.Sleep(3 * time.Second)
+	}
+	if blogContent == "" {
+		fmt.Println("Hacker News AI 助手运行错误:", time.Now().Format("2006-01-02 15:04:05"))
+		return
 	}
 	today := time.Now().Format("20060102")
 	blogContent = fmt.Sprintf("## Hacker News 中文精选 NO.%s\n\n一个基于 Hacker News 的中文日报项目，每天自动抓取 Hacker News 热门文章及评论，通过 AI 生成中文解读与总结，传递科技前沿信息。\n\n![Hacker News 中文精选](https://cdn.wangtwothree.com/imgur/f6uVgbS.jpeg)\n---\n\n%s", today, blogContent)
@@ -105,13 +111,13 @@ func fetchAndProcessDev(devService *services.DevService, aiService *services.AIS
 		return
 	}
 	// 打印获取到的文章数量
-	fmt.Printf("获取到 %d 篇dev.to文章\n", len(stories))
+	fmt.Printf("dev.to 获取到 %d 篇dev.to文章\n", len(stories))
 	blogContent := ""
 	// 为每篇文章生成中文总结
 	for i := range stories {
 		fmt.Printf("%d. %s\n", i, stories[i].Title)
 		if err := aiService.GenerateSummary(&stories[i]); err != nil {
-			log.Printf("生成文章总结失败 [%s]: %v", stories[i].Title, err)
+			log.Printf("dev.to 生成文章总结失败 [%s]: %v", stories[i].Title, err)
 			continue
 		}
 
@@ -125,8 +131,13 @@ func fetchAndProcessDev(devService *services.DevService, aiService *services.AIS
 			stories[i].Time.Format("2006-01-02 15:04:05"),
 		)
 		blogContent += content
+		// 每次分析间隔3秒，防止api频率限制
+		time.Sleep(3 * time.Second)
 	}
-
+	if blogContent == "" {
+		fmt.Println("dev.to AI 助手运行错误:", time.Now().Format("2006-01-02 15:04:05"))
+		return
+	}
 	today := time.Now().Format("20060102")
 	blogContent = fmt.Sprintf("## DEV 社区中文精选 NO.%s\n\nDev Community 是一个面向全球开发者的技术博客与协作平台，本文是基于 dev.to 的中文日报项目，每天自动抓取 Dev Community 热门文章及评论，通过 AI 生成中文解读与总结，传递科技前沿信息。\n\n![Dev Community 中文精选](https://cdn.wangtwothree.com/imgur/ebLSg8b.png)\n---\n\n%s", today, blogContent)
 	title := fmt.Sprintf("开发者简报 NO.%s：DEV 社区中文解读，全球开发者技术瞭望", today)

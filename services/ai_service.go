@@ -2,7 +2,9 @@ package services
 
 import (
 	"context"
+	"errors"
 	"fmt"
+	"google.golang.org/api/googleapi"
 	"net/http"
 	"time"
 
@@ -62,13 +64,26 @@ func (s *AIService) GenerateSummary(story *models.Story) error {
 		story.Content,
 	)
 
+	retryDelay := 0
 	// 调用Gemini API生成总结
 	ctx := context.Background()
-	model := s.service.GenerativeModel("gemini-2.0-flash")
+	model := s.service.GenerativeModel("gemini-2.0-flash-lite")
 	model.SetTemperature(0.3)
-
+retry:
 	resp, err := model.GenerateContent(ctx, genai.Text(prompt))
+	retryDelay += 1
 	if err != nil {
+		var googleErr *googleapi.Error
+		if errors.As(err, &googleErr) && googleErr.Code == http.StatusTooManyRequests {
+			if retryDelay < 3 {
+				// 429 错误，等待后重试
+				fmt.Printf("遇到 429 错误，等待 60 秒后重试（第 %d 次）\n", retryDelay)
+				time.Sleep(60 * time.Second)
+				goto retry
+			} else {
+				fmt.Printf("429 错误已经重试 3 次了，不再重试")
+			}
+		}
 		return fmt.Errorf("生成总结失败: %v", err)
 	}
 
