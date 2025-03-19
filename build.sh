@@ -5,6 +5,7 @@ git pull origin main
 echo '打包镜像'
 docker build -t hacker-news-ai:latest .
 echo '启动容器'
-docker-compose up --force-recreate -d --remove-orphans
+docker rm -f hacker-news-ai
+docker compose up --force-recreate -d --remove-orphans
 echo '清理不再使用的镜像、容器和数据卷'
 docker system prune --all --force --volumes --filter "label!=keep=true"
